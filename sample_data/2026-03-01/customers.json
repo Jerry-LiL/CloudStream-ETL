@@ -1,0 +1,5 @@
+{"customer_id":"C001","full_name":"  Riya Shah  ","email":"Riya.Shah@Example.com ","city":"Austin","region":"TX","segment":"consumer","updated_at":"2026-03-01T08:00:00Z"}
+{"customer_id":"C002","full_name":"Jon Hale","email":"jon.hale@example.com","city":"Seattle","region":"WA","segment":"smb","updated_at":"2026-03-01T08:05:00Z"}
+{"customer_id":"C001","full_name":"Riya Shah","email":"riya.shah@example.com","city":"Austin","region":"TX","segment":"consumer","updated_at":"2026-03-01T07:00:00Z"}
+{"customer_id":" ","full_name":"Ghost Row","email":"ghost@example.com","city":"Austin","region":"TX","segment":"consumer","updated_at":"2026-03-01T08:30:00Z"}
+{"customer_id":"C009","full_name":"Bad Email","email":"not-an-email","city":"Austin","region":"TX","segment":"consumer","updated_at":"2026-03-01T08:40:00Z"}
