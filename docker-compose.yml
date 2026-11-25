@@ -1,0 +1,49 @@
+# Local stand-in for the S3 landing zone. The pipeline container uses the
+# same boto3 and Spark s3a settings as a real AWS account; only the endpoint changes.
+services:
+  localstack:
+    image: localstack/localstack:3.8
+    ports:
+      - "4566:4566"
+    environment:
+      SERVICES: s3
+      DEFAULT_REGION: us-east-1
+
+  bucket-init:
+    image: amazon/aws-cli:2.22.35
+    depends_on:
+      - localstack
+    environment:
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_DEFAULT_REGION: us-east-1
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        until aws --endpoint-url http://localstack:4566 s3 mb s3://cloudstream-lake; do
+          sleep 2
+        done
+
+  pipeline:
+    build: .
+    depends_on:
+      bucket-init:
+        condition: service_completed_successfully
+    environment:
+      STORAGE_BACKEND: s3
+      S3_BUCKET: cloudstream-lake
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_ENDPOINT_URL: http://localstack:4566
+      WAREHOUSE_BACKEND: duckdb
+      LAKE_ROOT: /app/data/lake
+      DUCKDB_PATH: /app/data/warehouse/cloudstream.duckdb
+      SOURCE_DIR: /app/sample_data
+      CLOUDSTREAM_HOME: /app
+    volumes:
+      - lake-data:/app/data
+    command: ["run", "--date", "2026-03-01"]
+
+volumes:
+  lake-data:
